@@ -57,7 +57,7 @@ public class GFp2Tables {
      *  (a,b) -> "a + bx"
      */
     private String elementToString(int[] e) {
-        return e[0] + " x " + e[1] + "x";
+        return e[0] + " + " + e[1] + "x";
     }
 
     /**
