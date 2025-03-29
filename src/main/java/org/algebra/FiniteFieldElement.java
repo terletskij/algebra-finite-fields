@@ -1,5 +1,7 @@
 package org.algebra;
 
+import java.util.Objects;
+
 public class FiniteFieldElement {
     private final int p;
     private final int a, b; // element represented as a + bx
@@ -21,6 +23,26 @@ public class FiniteFieldElement {
         int newA = (this.a * el.a + this.b * el.b * coefB) % p;
         int newB = (this.a * el.b + this.b * el.a + this.b * el.b * coefA) % p;
         return new FiniteFieldElement(p, newA, newB, coefA, coefB);
+    }
+
+    public FiniteFieldElement pow(int exponent) {
+        FiniteFieldElement result = new FiniteFieldElement(p, 1, 0, coefA, coefB); // 1 + 0x neutral element
+        for (int i = 0; i < exponent; i++) {
+            result = result.multiply(this);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        FiniteFieldElement that = (FiniteFieldElement) o;
+        return p == that.p && a == that.a && b == that.b && coefA == that.coefA && coefB == that.coefB;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(p, a, b, coefA, coefB);
     }
 
     @Override
