@@ -21,6 +21,7 @@ public class Main {
                 GFp2Tables field = new GFp2Tables(p);
                 field.printAdditionTable();
                 field.printMultiplicationTable();
+                field.printGenerators();
             } catch (NumberFormatException e) {
                 System.out.println("Input must be an integer or 'q' to exit.");
             } catch (RuntimeException e) {
