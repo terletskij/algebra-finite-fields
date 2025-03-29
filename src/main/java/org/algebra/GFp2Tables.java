@@ -1,12 +1,14 @@
 package org.algebra;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GFp2Tables {
     private final int p;
     private final List<FiniteFieldElement> elements;
-    private final int coefA, coefB;
+    private final int coefA, coefB; // coefs of x^2 + ax + b
 
     public GFp2Tables(int p) {
         this.p = p;
@@ -35,6 +37,15 @@ public class GFp2Tables {
     public void printMultiplicationTable() {
         System.out.println("\nMultiplication Table GF(" + p + "^2) with x^2 + " + coefA + "x + " + coefB + ":");
         printTable(false);
+    }
+
+    public void printGenerators() {
+        System.out.println("\nGenerator Elements of GF(" + p + "^2):");
+        List<FiniteFieldElement> generators = findGenerators();
+
+        for (FiniteFieldElement generator : generators) {
+            System.out.println(generator);
+        }
     }
 
     private void printTable(boolean isAddition) {
@@ -70,5 +81,48 @@ public class GFp2Tables {
             }
         }
         throw new RuntimeException("No irreducible polynomial found for GF(" + p + "^2)");
+    }
+
+    private List<FiniteFieldElement> findGenerators() {
+        List<FiniteFieldElement> generators = new ArrayList<>();
+        int groupOrder = p * p - 1;
+
+        Set<Integer> primeFactors = factorize(groupOrder);
+        FiniteFieldElement one = new FiniteFieldElement(p, 1, 0, coefA, coefB);
+
+        for (FiniteFieldElement e : elements) {
+            if (e.equals(0)) continue;
+            boolean isPrimitive = true;
+
+            for (int factor: primeFactors) {
+                int exponent = groupOrder / factor;
+                FiniteFieldElement power = e.pow(exponent);
+                if (power.equals(one)) {
+                    isPrimitive = false;
+                    break;
+                }
+            }
+            if (isPrimitive) {
+                generators.add(e);
+            }
+        }
+
+        return generators;
+    }
+
+    /**
+     * @param n number to factorize
+     * @return unique prime divisors
+     */
+    private Set<Integer> factorize(int n) {
+        Set<Integer> factors = new HashSet<>();
+
+        for (int i = 2; i <= n; i++) {
+            while (n % i == 0) {
+                factors.add(i);
+                n /= i;
+            }
+        }
+        return factors;
     }
 }
