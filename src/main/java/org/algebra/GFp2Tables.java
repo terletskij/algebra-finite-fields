@@ -18,6 +18,11 @@ public class GFp2Tables {
         this.elements = generateElements();
     }
 
+    /**
+     * Generates all elements of GF(p^2) in the form of a + bx.
+     *
+     * @return A list of all elements in GF(p^2).
+     */
     private List<FiniteFieldElement> generateElements() {
         List<FiniteFieldElement> elems = new ArrayList<>();
 
@@ -65,6 +70,12 @@ public class GFp2Tables {
         }
     }
 
+    /**
+     * Finds an irreducible polynomial of the form x^2 + ax + b.
+     *
+     * @param p prime number
+     * @return An int array of {a, b} representing the irreducible polynomial x^2 + ax + b
+     */
     private int[] findIrreduciblePolynomial(int p) {
         for (int a = 0; a < p; a++) {
             for (int b = 1; b < p; b++) {
@@ -83,6 +94,12 @@ public class GFp2Tables {
         throw new RuntimeException("No irreducible polynomial found for GF(" + p + "^2)");
     }
 
+
+    /**
+     * Finds all generator elements of the multiplicative group GF(p^2).
+     *
+     * @return A list of generator elements of GF(p^2).
+     */
     private List<FiniteFieldElement> findGenerators() {
         List<FiniteFieldElement> generators = new ArrayList<>();
         int groupOrder = p * p - 1;

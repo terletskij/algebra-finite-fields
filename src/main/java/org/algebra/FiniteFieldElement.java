@@ -25,6 +25,12 @@ public class FiniteFieldElement {
         return new FiniteFieldElement(p, newA, newB, coefA, coefB);
     }
 
+    /**
+     * Calculates the power of an element using repeated multiplication.
+     *
+     * @param exponent The exponent to raise the element to.
+     * @return The result of (this^exponent) in GF(p^2).
+     */
     public FiniteFieldElement pow(int exponent) {
         FiniteFieldElement result = new FiniteFieldElement(p, 1, 0, coefA, coefB); // 1 + 0x neutral element
         for (int i = 0; i < exponent; i++) {
