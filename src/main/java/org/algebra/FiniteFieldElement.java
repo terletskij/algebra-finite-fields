@@ -18,7 +18,7 @@ public class FiniteFieldElement {
     public FiniteFieldElement add(FiniteFieldElement el) {
         return new FiniteFieldElement(p, (this.a + el.a) % p, (this.b + el.b) % p, coefA, coefB);
     }
-    
+
     public FiniteFieldElement multiply(FiniteFieldElement el) {
         int newA = (this.a * el.a + this.b * el.b * coefB) % p;
         int newB = (this.a * el.b + this.b * el.a + this.b * el.b * coefA) % p;
@@ -39,7 +39,7 @@ public class FiniteFieldElement {
 
     @Override
     public String toString() {
-        if (b == 0 && a == 0) return "0";
+        if (b == 0) return a == 0 ? "0" : String.valueOf(a);
         if (a == 0) return (b == 1) ? "x" : b + "x";
         return (b == 1) ? a + " + x" : a + " + " + b + "x";
     }
