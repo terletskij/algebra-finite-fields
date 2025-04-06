@@ -19,9 +19,29 @@ public class FiniteFieldElement {
         return new FiniteFieldElement(p, (this.a + el.a) % p, (this.b + el.b) % p, coefA, coefB);
     }
 
+    /**
+     * Multiplies two elements (a + bx) and (c + dx) in GF(p^2),
+     * using the irreducible polynomial <br> x^2 + coefA * x + coefB = 0.
+     * <br> x^2 = -coefA*x - coefB
+     * <br>
+     * <br> Formula:
+     * <br> (a + bx)(c + dx) = ac + (ad + bc)x + bdx^2
+     * <br>
+     * <br> Substitute x^2 = -coefAx - coefB
+     * <br> (a + bx)(c + dx) = (ac - bdcoefB) + (ad + bc - bdcoefA)x
+     * <br>
+     * <br> So, the result is:
+     * <br> newA = (ac - bdcoefB) % p
+     * <br> newB = (ad + bc - bdcoefA) % p
+     * @return product of elements
+     */
     public FiniteFieldElement multiply(FiniteFieldElement el) {
-        int newA = (this.a * el.a + this.b * el.b * coefB) % p;
-        int newB = (this.a * el.b + this.b * el.a + this.b * el.b * coefA) % p;
+        int newA = ((this.a * el.a) - (this.b * el.b * coefB)) % p;
+        int newB = ((this.a * el.b) + (this.b * el.a) - (this.b * el.b * coefA)) % p;
+
+        // make sure that newA, newB is not negative numbers
+        newA = (newA % p + p) % p;
+        newB = (newB % p + p) % p;
         return new FiniteFieldElement(p, newA, newB, coefA, coefB);
     }
 
