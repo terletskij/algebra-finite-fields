@@ -35,25 +35,7 @@ public class GFp2Tables {
     }
 
     public void printAdditionTable() {
-        System.out.println("\nAddition Table GF(" + p + "^2):");
-        printTable(true);
-    }
-
-    public void printMultiplicationTable() {
-        System.out.println("\nMultiplication Table GF(" + p + "^2) with x^2 + " + coefA + "x + " + coefB + ":");
-        printTable(false);
-    }
-
-    public void printGenerators() {
-        System.out.println("\nGenerator Elements of GF(" + p + "^2):");
-        List<FiniteFieldElement> generators = findGenerators();
-
-        for (FiniteFieldElement generator : generators) {
-            System.out.println(generator);
-        }
-    }
-
-    private void printTable(boolean isAddition) {
+        System.out.println("\nAddition Table GF(" + p + "^2) with x^2 + " + coefA + "x + " + coefB + ":");
         System.out.print("        ");
         for (FiniteFieldElement header : elements) {
             System.out.printf("%10s", header);
@@ -63,7 +45,25 @@ public class GFp2Tables {
         for (FiniteFieldElement e1 : elements) {
             System.out.printf("%10s", e1);
             for (FiniteFieldElement e2 : elements) {
-                FiniteFieldElement result = isAddition ? e1.add(e2) : e1.multiply(e2);
+                FiniteFieldElement result = e1.add(e2);
+                System.out.printf("%10s", result);
+            }
+            System.out.println();
+        }
+    }
+
+    public void printMultiplicationTable() {
+        System.out.println("\nMultiplication Table GF(" + p + "^2) with x^2 + " + coefA + "x + " + coefB + ":");
+        System.out.print("        ");
+        for (FiniteFieldElement header : elements) {
+            System.out.printf("%10s", header);
+        }
+        System.out.println();
+
+        for (FiniteFieldElement e1 : elements) {
+            System.out.printf("%10s", e1);
+            for (FiniteFieldElement e2 : elements) {
+                FiniteFieldElement result = e1.multiply(e2);
                 System.out.printf("%10s", result);
             }
             System.out.println();
@@ -72,7 +72,6 @@ public class GFp2Tables {
 
     /**
      * Finds an irreducible polynomial of the form x^2 + ax + b.
-     *
      * @param p prime number
      * @return An int array of {a, b} representing the irreducible polynomial x^2 + ax + b
      */
@@ -92,54 +91,5 @@ public class GFp2Tables {
             }
         }
         throw new RuntimeException("No irreducible polynomial found for GF(" + p + "^2)");
-    }
-
-
-    /**
-     * Finds all generator elements of the multiplicative group GF(p^2).
-     *
-     * @return A list of generator elements of GF(p^2).
-     */
-    private List<FiniteFieldElement> findGenerators() {
-        List<FiniteFieldElement> generators = new ArrayList<>();
-        int groupOrder = p * p - 1;
-
-        Set<Integer> primeFactors = factorize(groupOrder);
-        FiniteFieldElement one = new FiniteFieldElement(p, 1, 0, coefA, coefB);
-
-        for (FiniteFieldElement e : elements) {
-            if (e.equals(0)) continue;
-            boolean isPrimitive = true;
-
-            for (int factor: primeFactors) {
-                int exponent = groupOrder / factor;
-                FiniteFieldElement power = e.pow(exponent);
-                if (power.equals(one)) {
-                    isPrimitive = false;
-                    break;
-                }
-            }
-            if (isPrimitive) {
-                generators.add(e);
-            }
-        }
-
-        return generators;
-    }
-
-    /**
-     * @param n number to factorize
-     * @return unique prime divisors
-     */
-    private Set<Integer> factorize(int n) {
-        Set<Integer> factors = new HashSet<>();
-
-        for (int i = 2; i <= n; i++) {
-            while (n % i == 0) {
-                factors.add(i);
-                n /= i;
-            }
-        }
-        return factors;
     }
 }
